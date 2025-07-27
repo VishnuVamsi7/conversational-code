@@ -15,49 +15,35 @@
 
 import { useState } from "react"
 import { HeroSection } from "@/components/portfolio/hero-section"
+import { AboutSection } from "@/components/portfolio/about-section"
+import { ExperienceSection } from "@/components/portfolio/experience-section"
 import { ProjectsSection } from "@/components/portfolio/projects-section"
+import { PublicationsSection } from "@/components/portfolio/publications-section"
+import { ExtracurricularSection } from "@/components/portfolio/extracurricular-section"
 import { ChatbotInterface } from "@/components/portfolio/chatbot-interface"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { VisitorCounter } from "@/components/ui/visitor-counter"
 
 const Index = () => {
-  const [isChatOpen, setIsChatOpen] = useState(false)
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Fixed header with utilities */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border/50">
-        <div className="container-portfolio flex items-center justify-between py-4">
-          {/* Logo/Brand */}
-          <div className="text-xl font-bold text-gradient">
-            Portfolio
-          </div>
-          
-          {/* Header utilities */}
-          <div className="flex items-center gap-4">
-            <VisitorCounter />
-            <ThemeToggle />
-          </div>
-        </div>
+      {/* Header with theme toggle */}
+      <header className="fixed top-4 right-4 z-40 flex gap-4">
+        <VisitorCounter />
+        <ThemeToggle />
       </header>
 
       {/* Main content */}
       <main>
-        {/* Hero section - First impression with call-to-action */}
-        <HeroSection onChatOpen={() => setIsChatOpen(true)} />
-        
-        {/* Projects showcase - Core portfolio content */}
+        <HeroSection />
+        <AboutSection />
+        <ExperienceSection />
         <ProjectsSection />
-        
-        {/* TODO: Add remaining sections */}
-        {/* <SkillsSection /> */}
-        {/* <ExperienceSection /> */}
-        {/* <EducationSection /> */}
-        {/* <PublicationsSection /> */}
-        {/* <ExtracurricularSection /> */}
+        <PublicationsSection />
+        <ExtracurricularSection />
       </main>
 
-      {/* Interactive chatbot */}
+      {/* Chatbot Interface */}
       <ChatbotInterface />
 
       {/* Footer - Coming in next iteration */}

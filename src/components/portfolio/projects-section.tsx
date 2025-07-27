@@ -52,18 +52,17 @@ interface Project {
 const projects: Project[] = [
   {
     id: "1",
-    title: "Advanced Image Classification System",
-    description: "Deep learning model for multi-class image recognition with 95%+ accuracy",
-    longDescription: "Comprehensive computer vision solution using transfer learning and custom CNN architectures",
-    technologies: ["Python", "TensorFlow", "OpenCV", "FastAPI", "Docker"],
-    category: "computer-vision",
+    title: "Pink Slime Journalism Detection",
+    description: "NLP pipeline analyzing 600k+ news articles to detect misinformation patterns",
+    longDescription: "Comprehensive misinformation detection system using stylistic and sentiment analysis to identify deceptive journalism patterns",
+    technologies: ["Python", "NLTK", "SpaCy", "TextBlob", "TF-IDF", "t-SNE"],
+    category: "nlp",
     image: "/api/placeholder/400/300",
-    githubUrl: "https://github.com/username/project1",
-    liveUrl: "https://demo.project1.com",
+    githubUrl: "https://github.com/username/pink-slime-detection",
     metrics: {
-      accuracy: "95.8%",
-      dataset: "100K+ images",
-      performance: "23ms inference"
+      accuracy: "3x sentiment detection",
+      dataset: "600K+ articles",
+      performance: "8 distinct clusters"
     },
     year: 2024,
     featured: true
