@@ -124,34 +124,86 @@ export function ChatbotInterface() {
     addMessage(content, 'user')
   }
 
-  // Simulate API call to chatbot backend
+  // API call to chatbot backend with improved error handling and fallback
   const sendMessageToBot = async (message: string): Promise<string> => {
-  setConnectionStatus('connecting')
+    setConnectionStatus('connecting')
 
-  try {
-    const response = await fetch(
+    // Multiple endpoint configurations to try
+    const endpoints = [
+      // Primary production endpoint
+      window.location.hostname === "localhost" 
+        ? "http://localhost:3001/api/chat"
+        : "https://myportfolio-mon0.onrender.com/api/chat",
+      // Fallback endpoints
       window.location.hostname === "localhost"
-        ? "http://127.0.0.1:10000/receive"
-        : "https://myportfolio-mon0.onrender.com/receive",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }) // 👈 Flask expects "message"
+        ? "http://127.0.0.1:10000/receive" 
+        : "https://myportfolio-mon0.onrender.com/receive"
+    ];
+
+    let lastError: Error | null = null;
+
+    // Try each endpoint with timeout
+    for (const endpoint of endpoints) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({ 
+            message,
+            sessionId: `user-session-${Date.now()}` 
+          }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setConnectionStatus('connected');
+
+        // Handle different response formats
+        return data.response || data.answer || data.message || "✅ Connected successfully!";
+
+      } catch (error) {
+        lastError = error as Error;
+        console.warn(`Failed to connect to ${endpoint}:`, error);
+        continue;
       }
-    )
+    }
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    // All endpoints failed, provide fallback response
+    setConnectionStatus('error');
+    
+    // Provide helpful error message based on the type of error
+    const errorMessage = lastError?.name === 'AbortError' 
+      ? "Connection timed out. The server might be starting up."
+      : lastError?.message?.includes('Failed to fetch') 
+        ? "Unable to reach the server. Please check your internet connection."
+        : `Connection failed: ${lastError?.message || "Unknown error"}`;
 
-    const data = await response.json()
-    setConnectionStatus('connected')
+    console.error('All chatbot endpoints failed:', lastError);
+    
+    // Return a helpful fallback response instead of throwing
+    return `🤖 I'm currently having trouble connecting to my AI backend. ${errorMessage} 
 
-    // Flask returns { message, response }, so take "response"
-    return data.response || "⚠️ No response received."
-  } catch (error) {
-    setConnectionStatus('error')
-    throw new Error("Failed to connect to AI assistant")
+In the meantime, here are some things I can tell you about this portfolio:
+
+• This portfolio showcases expertise in AI/ML and software development
+• Projects include computer vision, natural language processing, and web development
+• Built with modern technologies like React, TypeScript, and Python
+• Features responsive design and interactive components
+
+Please try again in a few moments, or feel free to explore the portfolio directly!`;
   }
-}
 
 
   // Handle sending messages
@@ -167,24 +219,43 @@ export function ChatbotInterface() {
       const botResponse = await sendMessageToBot(userMessage)
       setTimeout(() => {
         setIsTyping(false)
+        
+        // Check if this is a fallback response (indicates connection issues)
+        const isConnectionIssue = botResponse.includes("having trouble connecting");
+        const confidence = isConnectionIssue ? 0 : 0.85 + Math.random() * 0.15;
+        
         addBotMessage(botResponse, {
-          confidence: 0.85 + Math.random() * 0.15,
-          suggestions: [
+          confidence,
+          suggestions: isConnectionIssue ? [
+            "Try refreshing the page",
+            "Check your internet connection", 
+            "Contact support if the issue persists"
+          ] : [
             "Tell me about the technical stack",
             "What makes these projects unique?",
             "Can you explain the AI methodologies used?"
           ]
         })
+
+        // Show toast only for connection issues
+        if (isConnectionIssue && connectionStatus === 'error') {
+          toast({
+            title: "Connection Issue",
+            description: "Unable to connect to AI backend. Using offline mode.",
+            variant: "destructive"
+          })
+        }
       }, 500)
     } catch (error) {
+      // This should rarely happen now since we handle errors in sendMessageToBot
       setIsTyping(false)
       addBotMessage(
         "I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
         { confidence: 0 }
       )
       toast({
-        title: "Connection Error",
-        description: "Failed to reach AI assistant. Please check your connection.",
+        title: "Unexpected Error",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive"
       })
     }
