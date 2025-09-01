@@ -126,33 +126,33 @@ export function ChatbotInterface() {
 
   // Simulate API call to chatbot backend
   const sendMessageToBot = async (message: string): Promise<string> => {
-    // Replace this with your actual API endpoint
-    // Example: const response = await fetch('/api/chat', { method: 'POST', body: JSON.stringify({ message }) })
-    
-    setConnectionStatus('connecting')
-    
-    try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000))
-      
-      setConnectionStatus('connected')
-      
-      // Mock responses - replace with actual API integration
-      const mockResponses = [
-        "That's a great question about the portfolio! Based on the projects showcased, there's a strong focus on machine learning and AI applications.",
-        "I can see you're interested in the technical details. The portfolio demonstrates expertise in Python, TensorFlow, and various ML frameworks.",
-        "The projects shown here range from computer vision to natural language processing, showing versatility in AI/ML domains.",
-        "Would you like me to elaborate on any specific project or technology mentioned in the portfolio?",
-        "I'm trained on detailed information about each project, including the methodologies, challenges, and outcomes. What would you like to know more about?"
-      ]
-      
-      return mockResponses[Math.floor(Math.random() * mockResponses.length)]
-      
-    } catch (error) {
-      setConnectionStatus('error')
-      throw new Error('Failed to connect to AI assistant')
-    }
+  setConnectionStatus('connecting')
+
+  try {
+    const response = await fetch(
+      window.location.hostname === "localhost"
+        ? "http://127.0.0.1:10000/receive"
+        : "https://myportfolio-mon0.onrender.com/receive",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }) // 👈 Flask expects "message"
+      }
+    )
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+
+    const data = await response.json()
+    setConnectionStatus('connected')
+
+    // Flask returns { message, response }, so take "response"
+    return data.response || "⚠️ No response received."
+  } catch (error) {
+    setConnectionStatus('error')
+    throw new Error("Failed to connect to AI assistant")
   }
+}
+
 
   // Handle sending messages
   const handleSendMessage = async () => {
