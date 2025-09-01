@@ -136,7 +136,7 @@ export function ChatbotInterface() {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }) // 👈 Flask expects "message"
+        body: JSON.stringify({ question: message }) // 👈 Flask expects "message"
       }
     )
 
