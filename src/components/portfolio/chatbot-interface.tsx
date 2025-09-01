@@ -128,11 +128,12 @@ export function ChatbotInterface() {
   const sendMessageToBot = async (message: string): Promise<string> => {
   setConnectionStatus('connecting')
 
+  
   try {
     const response = await fetch(
       window.location.hostname === "localhost"
-        ? "http://127.0.0.1:10000/receive"
-        : "https://chatbot-rag-mun6.onrender.com/chat",
+    ? "http://127.0.0.1:10000/receive"
+    : "https://chatbot-rag-mun6.onrender.com/receive" // ✅ correct,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
