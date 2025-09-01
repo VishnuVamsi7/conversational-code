@@ -132,7 +132,7 @@ export function ChatbotInterface() {
     const response = await fetch(
       window.location.hostname === "localhost"
         ? "http://127.0.0.1:10000/receive"
-        : "https://myportfolio-mon0.onrender.com/chat",
+        : "https://chatbot-rag-mun6.onrender.com/chat",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
