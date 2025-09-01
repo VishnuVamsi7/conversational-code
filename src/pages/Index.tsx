@@ -13,7 +13,7 @@
  * optimized for both desktop and mobile viewing experiences.
  */
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { HeroSection } from "@/components/portfolio/hero-section"
 import { AboutSection } from "@/components/portfolio/about-section"
 import { ExperienceSection } from "@/components/portfolio/experience-section"
@@ -25,6 +25,12 @@ import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { VisitorCounter } from "@/components/ui/visitor-counter"
 
 const Index = () => {
+  const chatbotRef = useRef<{ openChat: () => void }>(null)
+  
+  const handleChatOpen = () => {
+    chatbotRef.current?.openChat()
+  }
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Header with theme toggle */}
@@ -35,7 +41,7 @@ const Index = () => {
 
       {/* Main content */}
       <main>
-        <HeroSection />
+        <HeroSection onChatOpen={handleChatOpen} />
         <AboutSection />
         <ExperienceSection />
         <ProjectsSection />
@@ -44,7 +50,7 @@ const Index = () => {
       </main>
 
       {/* Chatbot Interface */}
-      <ChatbotInterface />
+      <ChatbotInterface ref={chatbotRef} />
 
       {/* Footer - Coming in next iteration */}
       <footer className="bg-muted/30 border-t border-border py-8">

@@ -21,7 +21,7 @@
  * 4. Integrate with your fine-tuned model API
  */
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react"
 import { 
   MessageCircle, 
   Send, 
@@ -60,7 +60,11 @@ interface ChatMessage {
 type ChatStatus = 'closed' | 'minimized' | 'open'
 type ConnectionStatus = 'connected' | 'connecting' | 'disconnected' | 'error'
 
-export function ChatbotInterface() {
+interface ChatbotInterfaceRef {
+  openChat: () => void
+}
+
+export const ChatbotInterface = forwardRef<ChatbotInterfaceRef>((props, ref) => {
   // Chat state management
   const [chatStatus, setChatStatus] = useState<ChatStatus>('closed')
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('disconnected')
@@ -75,6 +79,14 @@ export function ChatbotInterface() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   const { toast } = useToast()
+
+  // Expose methods to parent component
+  useImperativeHandle(ref, () => ({
+    openChat: () => {
+      setChatStatus('open')
+      setHasNewMessage(false)
+    }
+  }))
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -526,7 +538,9 @@ Please try again in a few moments, or feel free to explore the portfolio directl
       </div>
     </TooltipProvider>
   )
-}
+})
+
+ChatbotInterface.displayName = 'ChatbotInterface'
 
 /**
  * Backend Integration Instructions:
