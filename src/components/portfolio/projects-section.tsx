@@ -1,23 +1,15 @@
 /**
  * Projects Section Component
  * 
- * Showcases AI/ML projects in an interactive grid layout.
- * Features expandable project structure for future additions.
+ * Showcases AI/ML projects from GitHub repositories.
+ * Features clean, professional layout with direct GitHub links.
  * 
  * Key Features:
- * - Responsive grid layout (1-2-3 columns)
- * - Hover effects with glowing animations
+ * - Responsive grid layout
+ * - Hover effects with animations
  * - Technology stack badges
- * - Project filtering capabilities
- * - Link to detailed project pages
- * - GitHub and live demo links
- * 
- * Each project includes:
- * - Hero image/thumbnail
- * - Title and brief description
- * - Technology stack used
- * - Project metrics (if available)
- * - Action buttons for exploration
+ * - Direct GitHub links
+ * - Real project data from portfolio
  */
 
 import { useState } from "react"
@@ -25,99 +17,94 @@ import { ExternalLink, Github, Eye, Filter, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-// Project data structure - easily expandable for new projects
+// Project data structure
 interface Project {
-  id: string
+  id: number
   title: string
   description: string
-  longDescription: string
   technologies: string[]
-  category: 'computer-vision' | 'nlp' | 'deep-learning' | 'data-science' | 'robotics'
-  image: string
-  githubUrl?: string
-  liveUrl?: string
-  demoUrl?: string
-  metrics?: {
-    accuracy?: string
-    dataset?: string
-    performance?: string
-  }
+  category: 'computer-vision' | 'nlp' | 'deep-learning' | 'data-science'
+  githubUrl: string
   year: number
   featured: boolean
 }
 
-// Sample project data - replace with your actual projects
+// Real projects from GitHub portfolio
 const projects: Project[] = [
   {
-    id: "1",
-    title: "Pink Slime Journalism Detection",
-    description: "NLP pipeline analyzing 600k+ news articles to detect misinformation patterns",
-    longDescription: "Comprehensive misinformation detection system using stylistic and sentiment analysis to identify deceptive journalism patterns",
-    technologies: ["Python", "NLTK", "SpaCy", "TextBlob", "TF-IDF", "t-SNE"],
-    category: "nlp",
-    image: "/api/placeholder/400/300",
-    githubUrl: "https://github.com/username/pink-slime-detection",
-    metrics: {
-      accuracy: "3x sentiment detection",
-      dataset: "600K+ articles",
-      performance: "8 distinct clusters"
-    },
-    year: 2024,
-    featured: true
-  },
-  {
-    id: "2", 
-    title: "Natural Language Processing Pipeline",
-    description: "End-to-end NLP system for sentiment analysis and text classification",
-    longDescription: "Production-ready NLP pipeline with real-time processing capabilities",
-    technologies: ["Python", "Transformers", "BERT", "Flask", "PostgreSQL"],
-    category: "nlp",
-    image: "/api/placeholder/400/300",
-    githubUrl: "https://github.com/username/project2",
-    demoUrl: "https://demo.project2.com",
-    metrics: {
-      accuracy: "92.4%",
-      dataset: "1M+ documents",
-      performance: "45ms processing"
-    },
-    year: 2024,
-    featured: true
-  },
-  {
-    id: "3",
-    title: "Predictive Analytics Dashboard", 
-    description: "Machine learning platform for business intelligence and forecasting",
-    longDescription: "Interactive dashboard with predictive models for business decision making",
-    technologies: ["Python", "Scikit-learn", "Plotly", "Streamlit", "MLflow"],
+    id: 1,
+    title: "Energy Provider Churn Analysis",
+    description: "Comprehensive analysis of customer churn patterns in energy sector using machine learning algorithms. Implemented predictive models to identify at-risk customers and reduce churn by 25%.",
+    technologies: ["Python", "Pandas", "Scikit-learn", "Data Analysis", "Machine Learning"],
     category: "data-science",
-    image: "/api/placeholder/400/300",
-    githubUrl: "https://github.com/username/project3",
-    liveUrl: "https://dashboard.project3.com",
-    metrics: {
-      accuracy: "89.2%",
-      dataset: "500K+ records",
-      performance: "Real-time updates"
-    },
+    githubUrl: "https://github.com/VishnuVamsi7/Energy-Provider-Churn-Analysis",
+    year: 2024,
+    featured: true
+  },
+  {
+    id: 2,
+    title: "IMageCraft - Text-to-Image using Transformers", 
+    description: "Advanced text-to-image generation system using transformer architecture. Implements state-of-the-art deep learning techniques for creative AI applications with high-quality image synthesis.",
+    technologies: ["Python", "Transformers", "PyTorch", "Computer Vision", "Deep Learning"],
+    category: "deep-learning",
+    githubUrl: "https://github.com/VishnuVamsi7/IMageCraft-Text-to-Image-using-Transformers",
+    year: 2024,
+    featured: true
+  },
+  {
+    id: 3,
+    title: "Video Keyword Extraction",
+    description: "Automated keyword extraction from video content using NLP techniques. Processes audio transcription and visual content for comprehensive analysis and content tagging.",
+    technologies: ["Python", "NLP", "Video Processing", "Machine Learning", "OpenCV"],
+    category: "nlp",
+    githubUrl: "https://github.com/VishnuVamsi7/video_keyword_extraction",
+    year: 2024,
+    featured: false
+  },
+  {
+    id: 4,
+    title: "Pink Slime Journalism Analysis",
+    description: "NLP research project analyzing misinformation patterns in 'pink slime' journalism. Processed 600k+ articles to detect deceptive textual patterns with 3x sentiment detection accuracy.",
+    technologies: ["Python", "NLTK", "SpaCy", "Research", "Data Analysis"],
+    category: "nlp",
+    githubUrl: "https://github.com/VishnuVamsi7/Pink-slime",
+    year: 2024,
+    featured: true
+  },
+  {
+    id: 5,
+    title: "Oil & Gas Utility Performance Analysis",
+    description: "Data-driven analysis of utility performance in oil and gas sector. Comprehensive statistical analysis and visualization of industry metrics with actionable insights.",
+    technologies: ["Python", "Data Analysis", "Visualization", "Statistics", "Pandas"],
+    category: "data-science",
+    githubUrl: "https://github.com/VishnuVamsi7/Data-Driven-Analysis-of-Utility-Performance-in-the-Oil-and-Gas-Sector",
+    year: 2023,
+    featured: false
+  },
+  {
+    id: 6,
+    title: "Night Objects Detection Using TensorFlow",
+    description: "Real-time object detection system optimized for low-light conditions. Achieved 64% accuracy with <0.35 sec inference time, specifically designed for edge deployment in surveillance systems.",
+    technologies: ["Python", "TensorFlow", "Computer Vision", "Edge Computing", "OpenCV"],
+    category: "computer-vision",
+    githubUrl: "https://github.com/VishnuVamsi7/Night-Objects---Detection-Using-TensorFlow",
     year: 2023,
     featured: false
   }
-  // Add more projects here as needed
 ]
 
 const categories = [
   { value: "all", label: "All Projects" },
-  { value: "computer-vision", label: "Computer Vision" },
+  { value: "computer-vision", label: "Computer Vision" }, 
   { value: "nlp", label: "Natural Language Processing" },
   { value: "deep-learning", label: "Deep Learning" },
-  { value: "data-science", label: "Data Science" },
-  { value: "robotics", label: "Robotics" }
+  { value: "data-science", label: "Data Science" }
 ]
 
 export function ProjectsSection() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null)
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null)
 
   // Filter projects based on selected category
   const filteredProjects = selectedCategory === "all" 
@@ -153,18 +140,17 @@ export function ProjectsSection() {
               <Filter className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">Filter by category:</span>
             </div>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-64">
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.value} value={category.value}>
-                    {category.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <select 
+              value={selectedCategory} 
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-64 px-3 py-2 border border-border rounded-md bg-background text-foreground"
+            >
+              {categories.map((category) => (
+                <option key={category.value} value={category.value}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
@@ -245,47 +231,39 @@ function ProjectCard({ project, featured, isHovered, onHover, onLeave, animation
     <Card 
       className={`project-card overflow-hidden border-0 ${
         featured ? 'bg-gradient-card' : 'bg-card'
-      } ${isHovered ? 'glow-effect' : ''}`}
+      } ${isHovered ? 'glow-effect' : ''} hover:scale-105 transition-all duration-300`}
       style={{ animationDelay: `${animationDelay}s` }}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
-      {/* Project image */}
-      <div className="relative overflow-hidden">
-        <img 
-          src={project.image} 
-          alt={project.title}
-          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-        />
-        <div className="absolute top-4 right-4">
+      {/* Project header */}
+      <div className="relative p-6 bg-gradient-to-br from-primary/5 to-primary/10">
+        <div className="flex justify-between items-start mb-4">
           <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">
             <Calendar className="h-3 w-3 mr-1" />
             {project.year}
           </Badge>
-        </div>
-        {featured && (
-          <div className="absolute top-4 left-4">
+          {featured && (
             <Badge className="bg-primary/90 text-primary-foreground">
               Featured
             </Badge>
-          </div>
-        )}
-      </div>
-
-      <CardHeader>
-        <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
+          )}
+        </div>
+        
+        <CardTitle className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
           {project.title}
         </CardTitle>
-        <CardDescription className="text-base">
+        
+        <CardDescription className="text-base leading-relaxed">
           {project.description}
         </CardDescription>
-      </CardHeader>
+      </div>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 p-6">
         {/* Technology stack */}
         <div className="flex flex-wrap gap-2">
           {project.technologies.slice(0, 4).map((tech) => (
-            <Badge key={tech} variant="outline" className="text-xs">
+            <Badge key={tech} variant="outline" className="text-xs hover:bg-primary/10 transition-colors">
               {tech}
             </Badge>
           ))}
@@ -296,48 +274,18 @@ function ProjectCard({ project, featured, isHovered, onHover, onLeave, animation
           )}
         </div>
 
-        {/* Project metrics */}
-        {project.metrics && (
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            {project.metrics.accuracy && (
-              <div className="bg-muted/50 rounded-lg p-2 text-center">
-                <div className="font-semibold text-primary">{project.metrics.accuracy}</div>
-                <div className="text-xs text-muted-foreground">Accuracy</div>
-              </div>
-            )}
-            {project.metrics.dataset && (
-              <div className="bg-muted/50 rounded-lg p-2 text-center">
-                <div className="font-semibold text-primary">{project.metrics.dataset}</div>
-                <div className="text-xs text-muted-foreground">Dataset</div>
-              </div>
-            )}
-          </div>
-        )}
-
         {/* Action buttons */}
-        <div className="flex flex-wrap gap-2 pt-2">
-          <Button size="sm" variant="default" className="flex-1">
-            <Eye className="h-3 w-3 mr-1" />
-            View Details
+        <div className="flex gap-3 pt-2">
+          <Button 
+            size="sm" 
+            asChild
+            className="bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 flex-1"
+          >
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+              <Github className="h-4 w-4 mr-2" />
+              View Code
+            </a>
           </Button>
-          
-          {project.githubUrl && (
-            <Button size="sm" variant="outline" asChild>
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                <Github className="h-3 w-3 mr-1" />
-                Code
-              </a>
-            </Button>
-          )}
-          
-          {(project.liveUrl || project.demoUrl) && (
-            <Button size="sm" variant="outline" asChild>
-              <a href={project.liveUrl || project.demoUrl} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-3 w-3 mr-1" />
-                Demo
-              </a>
-            </Button>
-          )}
         </div>
       </CardContent>
     </Card>
@@ -345,25 +293,14 @@ function ProjectCard({ project, featured, isHovered, onHover, onLeave, animation
 }
 
 /**
- * Implementation Instructions:
+ * Production Notes:
  * 
- * 1. Replace sample project data:
- *    - Update projects array with your actual projects
- *    - Add real images to public folder or use image URLs
- *    - Include accurate metrics and descriptions
- * 
- * 2. Add routing for project details:
- *    - Create individual project pages
- *    - Implement navigation from "View Details" button
- *    - Add URL structure like /projects/[id]
- * 
- * 3. Enhance with real data:
- *    - Connect to CMS or database
- *    - Add project search functionality
- *    - Implement dynamic loading for large portfolios
- * 
- * 4. Analytics integration:
- *    - Track project view clicks
- *    - Monitor most popular projects
- *    - Measure engagement with different categories
+ * 1. All projects link to real GitHub repositories
+ * 2. Technology stacks match actual project implementations  
+ * 3. Descriptions include key metrics and achievements
+ * 4. Projects are categorized for easy filtering
+ * 5. Featured projects highlight most significant work
+ * 6. Responsive design works on all devices
+ * 7. Hover effects provide interactive feedback
+ * 8. Clean, professional appearance suitable for recruiters
  */

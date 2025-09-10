@@ -118,8 +118,15 @@ export function HeroSection({ onChatOpen }: HeroSectionProps) {
             
             <Button
               size="lg"
-              variant="outline"
-              className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 hover:scale-105 transition-all duration-300"
+              className="bg-[#9b59b6] hover:bg-[#8e44ad] text-white border-0 dark:bg-primary dark:hover:bg-primary/90 dark:text-primary-foreground hover:scale-105 transition-all duration-300 shadow-lg"
+              onClick={() => {
+                // Replace with your actual resume URL
+                const resumeUrl = "/resume.pdf"; // Update this path to your resume file
+                const link = document.createElement('a');
+                link.href = resumeUrl;
+                link.download = 'Sai_Vishnu_Vamsi_Resume.pdf';
+                link.click();
+              }}
             >
               <Download className="h-5 w-5 mr-2" />
               Download Resume

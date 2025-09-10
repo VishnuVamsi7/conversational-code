@@ -126,20 +126,19 @@ export function ChatbotInterface() {
 
   // Simulate API call to chatbot backend
   const sendMessageToBot = async (message: string): Promise<string> => {
-  setConnectionStatus('connecting')
+    setConnectionStatus('connecting')
 
-  
-  try {
-    const response = await fetch(
-      window.location.hostname === "localhost"
-    ? "http://127.0.0.1:10000/receive"
-    : "https://chatbot-rag-mun6.onrender.com/receive" // ✅ correct,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: message }) // 👈 Flask expects "message"
-      }
-    )
+    try {
+      const response = await fetch(
+        window.location.hostname === "localhost"
+          ? "http://127.0.0.1:10000/receive"
+          : "https://chatbot-rag-mun6.onrender.com/receive",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: message })
+        }
+      )
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
